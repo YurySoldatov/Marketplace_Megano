@@ -137,3 +137,5 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
     ]
 }
+
+CART_SESSION_ID = 'cart'

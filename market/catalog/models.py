@@ -4,13 +4,13 @@ from django.db import models
 def category_image_directory_path(instance: "CategoryIcon", filename):
 
     if instance.category.parent:
-        return f"catalog/icons/{instance.category.parent}/{instance.category}/{filename}"
+        return f"/media/catalogs_icons/{instance.category.parent}/{instance.category}/{filename}"
     else:
-        return f"catalog/icons/{instance.category}/{filename}"
+        return f"/media/catalogs_icons/{instance.category}/{filename}"
 
 
-def product_image_directory_path(instanse: "ProductImage", filename):
-    return f"products/images/{instanse.product.pk}/{filename}"
+def product_image_directory_path(instance: "ProductImage", filename):
+    return f"/media/products_images/{instance.product.pk}/{filename}"
 
 
 class Category(models.Model):
@@ -30,6 +30,16 @@ class Category(models.Model):
         verbose_name="Надкатегории"
     )
     favourite = models.BooleanField(default=False)
+
+    def href(self):
+        """
+        Получение ссылки
+        :return: ссылка
+        """
+        return f"/catalog/{self.pk}"
+
+    def __str__(self):
+        return self.title
 
 
 class CategoryIcon(models.Model):
@@ -51,6 +61,15 @@ class CategoryIcon(models.Model):
         null=True,
         verbose_name="Категория"
     )
+
+    def alt(self):
+        return self.category.title
+
+    def href(self):
+        return self.source
+
+    def __str__(self):
+        return f"icon of {self.category.title}"
 
 
 class Product(models.Model):
@@ -112,6 +131,12 @@ class ProductImage(models.Model):
         verbose_name="Товар"
     )
 
+    def src(self):
+        return self.image
+
+    def __str__(self):
+        return f"/{self.image}"
+
 
 class Tag(models.Model):
     class Meta:
@@ -163,3 +188,27 @@ class Sale(models.Model):
         related_name='sales',
         verbose_name="Товар"
     )
+
+    def price(self):
+        """
+        Получение первоначальной цены продукта
+        :return: str
+        """
+        return self.product.price
+
+    def title(self):
+        """
+        Получение названия продукта
+        :return: str
+        """
+        return self.product.title
+
+    def href(self):
+        """
+        Получение ссылки на детальную страницу продукта
+        :return: str
+        """
+        return f'/product/{self.product.pk}'
+
+    def __str__(self):
+        return self.product.title

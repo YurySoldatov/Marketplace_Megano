@@ -23,6 +23,21 @@ class Order(models.Model):
     city = models.CharField(max_length=20, default='', verbose_name='Город')
     address = models.CharField(max_length=200, default='', verbose_name='Адрес доставки')
 
+    def email(self):
+        return self.user.email
+
+    def fullName(self):
+        return self.user.fullName
+
+    def phone(self):
+        return self.user.phone
+
+    def orderId(self):
+        return f'{self.pk}'
+
+    def __str__(self):
+        return f'{self.pk}'
+
 
 class CountProductInOrder(models.Model):
     """
