@@ -17,7 +17,7 @@ class CategoryIconSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CategoryIcon
-        fields = ["id", "src", "alt"]
+        fields = ["id", "source", "alt"]
 
 
 class SubCategorySerializer(serializers.ModelSerializer):
@@ -35,7 +35,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = "__all__"
+        fields = ["title", "active", "parent", "favourite", "image", "subcategories"]
 
     image = CategoryIconSerializer(many=False, required=False)
     subcategories = SubCategorySerializer(many=True, required=False)

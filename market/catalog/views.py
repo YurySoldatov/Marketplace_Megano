@@ -6,10 +6,16 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Category, Product, Tag, Sale, Review
-from .serializers import CategorySerializer, ProductSerializer, TagsProductSerializer, SaleSerializer, ReviewSerializer
-
+from .serializers import (
+    CategorySerializer,
+    ProductSerializer,
+    TagsProductSerializer,
+    SaleSerializer,
+    ReviewSerializer
+)
 from django.urls import reverse_lazy
 
 
@@ -40,7 +46,7 @@ def filter_catalog(request: Request):
     category = request.META['HTTP_REFERER'].split('/')[4]
     print(category)
 
-    catalog = Product.objects
+    catalog = Product.objects.all()
 
     if category:
         try:
@@ -105,11 +111,15 @@ class BannersList(APIView):
         return Response(serialized.data)
 
 
-class CategoriesList(APIView):
-    def get(self, request: Request):
-        categories = Category.objects.filter(parent=None)
-        serialized = CategorySerializer(categories, many=True)
-        return Response(serialized.data)
+# class CategoriesList(APIView):
+#     def get(self, request: Request):
+#         categories = Category.objects.filter(parent=None)
+#         serialized = CategorySerializer(categories, many=True)
+#         return Response(serialized.data)
+
+class CategoriesListViewSet(ModelViewSet):
+    queryset = Category.objects.filter(parent=None)
+    serializer_class = CategorySerializer
 
 
 class TagsList(APIView):
@@ -159,9 +169,14 @@ class CreateReview(CreateModelMixin, GenericAPIView):
         request.data['product'] = product.pk
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        Review.objects.create(author=request.data['author'], email=request.data['email'],
-                              text=request.data['text'], rate=request.data['rate'],
-                              date=datetime.now(), product_id=product.pk)
+        Review.objects.create(
+            author=request.data['author'],
+            email=request.data['email'],
+            text=request.data['text'],
+            rate=request.data['rate'],
+            date=datetime.now(),
+            product_id=product.pk
+        )
 
         reviews = Review.objects.filter(product_id=product.pk)
         summa = sum([obj.rate for obj in reviews])

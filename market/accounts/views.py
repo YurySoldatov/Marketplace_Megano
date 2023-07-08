@@ -45,7 +45,7 @@ class SignUpView(APIView):
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy('users:sign-in')
+    next_page = reverse_lazy('accounts:sign-in')
 
 
 class AuthView(APIView):
