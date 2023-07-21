@@ -4,13 +4,13 @@ from django.db import models
 def category_image_directory_path(instance: "CategoryIcon", filename):
 
     if instance.category.parent:
-        return f"/media/catalogs_icons/{instance.category.parent}/{instance.category}/{filename}"
+        return f"media/catalogs_icons/{instance.category.parent}/{instance.category}/{filename}"
     else:
-        return f"/media/catalogs_icons/{instance.category}/{filename}"
+        return f"media/catalogs_icons/{instance.category}/{filename}"
 
 
 def product_image_directory_path(instance: "ProductImage", filename):
-    return f"/media/products_images/{instance.product.pk}/{filename}"
+    return f"products_images/{instance.product.pk}/{filename}"
 
 
 class Category(models.Model):

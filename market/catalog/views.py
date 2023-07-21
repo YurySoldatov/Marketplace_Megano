@@ -16,7 +16,6 @@ from .serializers import (
     SaleSerializer,
     ReviewSerializer
 )
-from django.urls import reverse_lazy
 
 
 def sort_products(request: Request, products):

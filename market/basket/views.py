@@ -8,7 +8,6 @@ from .cart import Cart
 from .models import Order, CountProductInOrder
 from .serializers import OrderSerializer
 from .serializers import BasketSerializer
-from accounts.models import Profile
 from catalog.models import Product
 
 
@@ -108,7 +107,7 @@ def get_products_in_cart(cart):
 
 class BasketOfProductsView(APIView):
     """
-    Представление для получения и удаления продуктов из корзины, добавления продуктов в корзину
+    Представление для добавления/удаления продуктов в корзине.
     """
 
     def get(self, *args, **kwargs):
